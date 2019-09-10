@@ -1,5 +1,5 @@
 # GCS
-![Version](https://img.shields.io/hexpm/v/gcs)
+[![Version](https://img.shields.io/hexpm/v/gcs)](https://hex.pm/packages/gcs)
 
 A simple library to interact with Google Cloud Storage
 

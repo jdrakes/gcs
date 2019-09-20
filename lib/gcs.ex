@@ -36,10 +36,10 @@ defmodule GCS do
 
     headers =
       headers
-      |> prepare_auth_header(:read_only)
+      |> prepare_auth_header(:read_write)
       |> add_content_type_header(content_type)
 
-    Client.request(:get, url, {:file, file_path}, headers, http_opts)
+    Client.request(:post, url, {:file, file_path}, headers, http_opts)
   end
 
   @doc """

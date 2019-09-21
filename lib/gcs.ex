@@ -14,7 +14,7 @@ defmodule GCS do
   def delete_object(bucket, delete_path, headers \\ [], http_opts \\ []) do
     url = delete_url(bucket, delete_path)
     headers = prepare_auth_header(headers, :read_write)
-    Client.request(:delete, url, nil, headers, http_opts)
+    Client.request(:delete, url, "", headers, http_opts)
   end
 
   @doc """
@@ -24,7 +24,7 @@ defmodule GCS do
   def download_object(bucket, download_path, headers \\ [], http_opts \\ []) do
     url = download_url(bucket, download_path)
     headers = prepare_auth_header(headers, :read_only)
-    Client.request(:get, url, nil, headers, http_opts)
+    Client.request(:get, url, "", headers, http_opts)
   end
 
   @doc """

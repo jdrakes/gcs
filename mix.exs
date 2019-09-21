@@ -29,7 +29,8 @@ defmodule GCS.MixProject do
     [
       {:httpoison, "~> 1.5"},
       {:goth, "~> 1.1"},
-      {:ex_doc, "~> 0.21.2", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.21.2", only: :dev, runtime: false},
+      {:jason, "~> 1.0"}
     ]
   end
 

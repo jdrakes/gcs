@@ -8,8 +8,9 @@ defmodule GCS.Client.HTTPoison do
     |> handle_response()
   end
 
-  defp handle_response({:ok, %Response{status_code: 200, body: body}}), do: {:ok, body}
-  defp handle_response({:ok, %Response{status_code: 204, body: body}}), do: {:ok, body}
+  defp handle_response({:ok, %Response{status_code: status, body: body}})
+       when status in [200, 204],
+       do: {:ok, Jason.decode(body)}
 
   defp handle_response({:ok, %Response{status_code: _code}}),
     do: {:error, :unexpected_gcs_response}

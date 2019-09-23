@@ -36,10 +36,10 @@ defmodule GCS do
 
     headers =
       headers
-      |> prepare_auth_header(:read_only)
+      |> prepare_auth_header(:read_write)
       |> add_content_type_header(content_type)
 
-    Client.request(:get, url, {:file, file_path}, headers, http_opts)
+    Client.request(:post, url, {:file, file_path}, headers, http_opts)
   end
 
   @doc """
@@ -48,6 +48,12 @@ defmodule GCS do
   @spec make_public(any, binary, headers, any) :: {:ok, any}
   def make_public(bucket, upload_path, headers \\ [], http_opts \\ []) do
     url = make_public_url(bucket, upload_path)
+
+    headers =
+      headers
+      |> prepare_auth_header(:full_control)
+      |> add_content_type_header("application/json")
+
     Client.request(:put, url, @make_public_body, headers, http_opts)
   end
 

@@ -14,7 +14,9 @@ defmodule GCS do
   def delete_object(bucket, delete_path, headers \\ [], http_opts \\ []) do
     url = delete_url(bucket, delete_path)
     headers = prepare_auth_header(headers, :read_write)
+
     Client.request(:delete, url, "", headers, http_opts)
+    |> maybe_decode_json_response()
   end
 
   @doc """
@@ -28,7 +30,8 @@ defmodule GCS do
   end
 
   @doc """
-  TODO
+  Uploads a file to GCS
+  Requires the bucket name, extra path information to be used inside the bucket, the path to the file to be uploaded, and the content type of the file.
   """
   @spec upload_object(any, binary, any, any, headers, any) :: {:ok, any}
   def upload_object(bucket, upload_path, file_path, content_type, headers \\ [], http_opts \\ []) do
@@ -40,6 +43,7 @@ defmodule GCS do
       |> add_content_type_header(content_type)
 
     Client.request(:post, url, {:file, file_path}, headers, http_opts)
+    |> maybe_decode_json_response()
   end
 
   @doc """
@@ -55,6 +59,7 @@ defmodule GCS do
       |> add_content_type_header("application/json")
 
     Client.request(:put, url, @make_public_body, headers, http_opts)
+    |> maybe_decode_json_response()
   end
 
   defp delete_url(bucket, path) do
@@ -82,4 +87,13 @@ defmodule GCS do
   defp add_content_type_header(headers, content_type) when is_list(headers) do
     [{"Content-Type", content_type} | headers]
   end
+
+  def maybe_decode_json_response({:ok, %{headers: headers, body: body}}) do
+    case List.keyfind(headers, "Content-Type", 0) do
+      "application/json" -> Jason.decode(body)
+      _ -> {:ok, body}
+    end
+  end
+
+  def maybe_decode_json_response(other), do: other
 end

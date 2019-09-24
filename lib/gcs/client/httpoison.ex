@@ -12,8 +12,8 @@ defmodule GCS.Client.HTTPoison do
        when status in [200, 204],
        do: {:ok, body}
 
-  defp handle_response({:ok, %Response{status_code: _code}}),
-    do: {:error, :unexpected_gcs_response}
+  defp handle_response({:ok, %Response{status_code: code, body: body}}),
+    do: {:error, {code, body}}
 
   defp handle_response({:error, %Error{reason: reason}}), do: {:error, reason}
 end

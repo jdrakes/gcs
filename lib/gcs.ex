@@ -10,13 +10,18 @@ defmodule GCS do
   @doc """
   TODO
   """
-  @spec delete_object(any, binary, headers, any) :: {:ok, any}
+  @spec delete_object(any, binary, headers, any) :: {:ok, :deleted} | {:error, any}
   def delete_object(bucket, delete_path, headers \\ [], http_opts \\ []) do
     url = delete_url(bucket, delete_path)
     headers = prepare_auth_header(headers, :read_write)
 
-    Client.request(:delete, url, "", headers, http_opts)
-    |> maybe_decode_json_response()
+    case Client.request(:delete, url, "", headers, http_opts) do
+      {:ok, ""} ->
+        {:ok, :deleted}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
   @doc """
@@ -43,7 +48,7 @@ defmodule GCS do
       |> add_content_type_header(content_type)
 
     Client.request(:post, url, {:file, file_path}, headers, http_opts)
-    |> maybe_decode_json_response()
+    |> decode_response()
   end
 
   @doc """
@@ -59,7 +64,7 @@ defmodule GCS do
       |> add_content_type_header("application/json")
 
     Client.request(:put, url, @make_public_body, headers, http_opts)
-    |> maybe_decode_json_response()
+    |> decode_response()
   end
 
   defp delete_url(bucket, path) do
@@ -88,10 +93,12 @@ defmodule GCS do
     [{"Content-Type", content_type} | headers]
   end
 
-  def maybe_decode_json_response({:ok, %{headers: headers, body: body}}) do
-    case List.keyfind(headers, "Content-Type", 0) do
-      "application/json" -> Jason.decode(body)
-      _ -> {:ok, body}
+  def decode_response({:ok, body}) do
+    IO.inspect(body)
+
+    case Jason.decode(body) do
+      {:ok, decoded_body} -> {:ok, decoded_body}
+      {:error, reason} -> {:error, reason}
     end
   end
 

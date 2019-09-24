@@ -1,4 +1,5 @@
 defmodule GCS.Client.HTTPoison do
+  @moduledoc false
   @behaviour GCS.Client
   alias HTTPoison.{Response, Error}
 

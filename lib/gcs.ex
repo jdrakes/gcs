@@ -9,8 +9,10 @@ defmodule GCS do
 
   @doc """
   Uploads a file to GCS
-  Requires the bucket name, the desired gcs file location *with desired filename*, the path to the file to be uploaded, and the content type of the file.
 
+  Requires the bucket name, the desired gcs file location **with desired filename**, the path to the file to be uploaded, and the content type of the file.
+
+  ## Examples
   ```
   iex> File.write!("file.txt", "hello")
   :ok
@@ -40,13 +42,13 @@ defmodule GCS do
 
   @doc """
   Downloads a file from GCS
-  Requires the bucket name and the gcs file location *with filename*.
 
-  *for example* if the `bucket` is `my-bucket` and the gcs file path is `myfile.png`,\
-  the file would be retrieved from `my-bucket` at the location `myfile.png`
+  Requires the bucket name and the gcs file location **with filename**.
 
-  *more examples*
+  **Example:** if the *bucket* is "my-bucket" and the *gcs file path* is "myfile.png",
+  the file would be retrieved from "my-bucket" at the location "myfile.png".
 
+  ## More Examples
   ```
   iex> File.write!("file.txt", "hello")
   :ok
@@ -65,12 +67,15 @@ defmodule GCS do
 
   @doc """
   Makes a file in GCS publicly accessible
-  Requires the bucket name and the gcs file location *with filename*.
 
-  The file will be available at `https://storage.googleapis.com/<bucket>/<file_path>`
-  *for example* if the `bucket` is `my-bucket` and the gcs file path is `myfile.png`, the url would be
-  `https://storage.googleapis.com/my-bucket/myfile.png`
+  Requires the bucket name and the gcs file location **with filename**.
 
+  The file will be available at *https://storage.googleapis.com/bucket/file_path*
+
+  **Example:** if the *bucket* is "my-bucket" and the *gcs file path* is "myfile.png", the url would be
+  *https://storage.googleapis.com/my-bucket/myfile.png*.
+
+  ## More Examples
   ```
   iex> File.write!("file.txt", "hello")
   :ok
@@ -79,7 +84,7 @@ defmodule GCS do
   iex> GCS.make_public("my-bucket", "myfile.txt")
   {:ok, %{...}} # GCS Response
   iex> SomeHTTPClient.get("https://storage.googleapis.com/my-bucket/myfile.txt")
-  {:ok, %{body: "hello"}"}
+  {:ok, %{body: "hello"}}
   ```
   """
   @spec make_public(any, binary, headers, any) :: {:ok, any}
@@ -97,8 +102,10 @@ defmodule GCS do
 
   @doc """
   Deletes a file from GCS
-  Requires the bucket name and the gcs file location *with filename*.
 
+  Requires the bucket name and the gcs file location **with filename**.
+
+  ## Examples
   ```
   iex> File.write!("file.txt", "hello")
   :ok
@@ -107,7 +114,7 @@ defmodule GCS do
   iex> GCS.make_public("my-bucket", "myfile.txt")
   {:ok, %{...}} # GCS Response
   iex> SomeHTTPClient.get("https://storage.googleapis.com/my-bucket/myfile.txt")
-  {:ok, %{body: "hello"}"}
+  {:ok, %{body: "hello"}}
   ```
   """
   @spec delete_object(any, binary, headers, any) :: {:ok, :deleted} | {:error, any}

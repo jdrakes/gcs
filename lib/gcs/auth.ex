@@ -1,5 +1,5 @@
 defmodule GCS.Auth do
-  @doc false
+  @moduledoc false
   alias Goth.Token
   base_url = "https://www.googleapis.com/auth/"
 

@@ -11,7 +11,7 @@ The package can be installed by adding `gcs` to your list of dependencies in `mi
 ```elixir
 def deps do
   [
-    {:gcs, "~> 0.0.1"}
+    {:gcs, "~> 0.1.0"}
   ]
 end
 ```

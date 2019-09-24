@@ -10,6 +10,13 @@ defmodule GCS do
   @doc """
   Uploads a file to GCS
   Requires the bucket name, the desired gcs file location *with desired filename*, the path to the file to be uploaded, and the content type of the file.
+
+  ```
+  iex> File.write!("file.txt", "hello")
+  :ok
+  iex> GCS.upload_object("my-bucket", "myfile.txt", "file.txt", "Application/txt")
+  {:ok, %{...}} # GCS Response
+  ```
   """
   @spec upload_object(any, binary, any, any, headers, any) :: {:ok, any}
   def upload_object(
@@ -44,7 +51,7 @@ defmodule GCS do
   iex> File.write!("file.txt", "hello")
   :ok
   iex> GCS.upload_object("my-bucket", "myfile.txt", "file.txt", "Application/txt")
-  {:ok, %{}} # GCS Response
+  {:ok, %{...}} # GCS Response
   iex> GCS.download_object("my-bucket", "myfile.txt")
   "hello"
   ```
@@ -68,9 +75,9 @@ defmodule GCS do
   iex> File.write!("file.txt", "hello")
   :ok
   iex> GCS.upload_object("my-bucket", "myfile.txt", "file.txt", "Application/txt")
-  {:ok, %{}} # GCS Response
+  {:ok, %{...}} # GCS Response
   iex> GCS.make_public("my-bucket", "myfile.txt")
-  {:ok, %{}} # GCS Response
+  {:ok, %{...}} # GCS Response
   iex> SomeHTTPClient.get("https://storage.googleapis.com/my-bucket/myfile.txt")
   {:ok, %{body: "hello"}"}
   ```
@@ -96,9 +103,9 @@ defmodule GCS do
   iex> File.write!("file.txt", "hello")
   :ok
   iex> GCS.upload_object("my-bucket", "myfile.txt", "file.txt", "Application/txt")
-  {:ok, %{}} # GCS Response
+  {:ok, %{...}} # GCS Response
   iex> GCS.make_public("my-bucket", "myfile.txt")
-  {:ok, %{}} # GCS Response
+  {:ok, %{...}} # GCS Response
   iex> SomeHTTPClient.get("https://storage.googleapis.com/my-bucket/myfile.txt")
   {:ok, %{body: "hello"}"}
   ```

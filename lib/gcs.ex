@@ -152,11 +152,11 @@ defmodule GCS do
 
   defp decode_json_response({:error, reason}), do: format_errors(reason)
 
-  defp format_errors({:gcp_error, status, body}) do
+  defp format_errors({:gcs_error, status, body}) do
     case Jason.decode(body) do
       {:ok, decoded_body} ->
         {:error,
-         {:gcp_error, status,
+         {:gcs_error, status,
           decoded_body["error"]["message"] || "Malformed json error response body"}}
 
       {:error, reason} ->

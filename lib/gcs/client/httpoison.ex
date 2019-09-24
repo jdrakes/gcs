@@ -13,7 +13,7 @@ defmodule GCS.Client.HTTPoison do
        do: {:ok, body}
 
   defp handle_response({:ok, %Response{status_code: code, body: body}}),
-    do: {:error, {:gcp_error, code, body}}
+    do: {:error, {:gcs_error, code, body}}
 
   defp handle_response({:error, %Error{reason: reason}}), do: {:error, reason}
 end

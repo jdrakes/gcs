@@ -112,11 +112,8 @@ defmodule GCS do
       {:ok, _} ->
         {:ok, :deleted}
 
-      {:error, {status, body}} ->
-        handle_gcs_error(status, body)
-
       {:error, reason} ->
-        {:error, reason}
+        format_errors(reason)
     end
   end
 
@@ -153,23 +150,19 @@ defmodule GCS do
     end
   end
 
-  defp decode_json_response({:error, {status, body}}) do
-    handle_gcs_error(status, body)
-  end
+  defp decode_json_response({:error, reason}), do: format_errors(reason)
 
-  defp decode_json_response({:error, reason}), do: {:error, reason}
-
-  defp handle_gcs_error(status, body) do
+  defp format_errors({:gcp_error, status, body}) do
     case Jason.decode(body) do
       {:ok, decoded_body} ->
-        do_handle_gcs_error(status, decoded_body)
+        {:error,
+         {:gcp_error, status,
+          decoded_body["error"]["message"] || "Malformed json error response body"}}
 
       {:error, reason} ->
         {:error, reason}
     end
   end
 
-  defp do_handle_gcs_error(status, json_error) do
-    {:error, {status, json_error["error"]["message"] || "Unexpected json error response"}}
-  end
+  defp format_errors(error), do: {:error, error}
 end
